@@ -1,0 +1,13 @@
+{
+  "Name": "AppModule1.dll",
+  "Version": "1.0.0.0",
+  "Branch": "Root",
+  "Repository": "http://",
+  "DirPath": "Modules",
+  "Dependencies": [],
+  "Nuget": {
+    "Respository": "http://192.168.100.40:3100/nuget/InSys/",
+    "Key": "dev123pkg$%^"
+  },
+  "DevelopmentDirectory": "<dirpath>"
+}

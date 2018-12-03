@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;net40</TargetFrameworks>
+    <Authors>LJ Gomez</Authors>
+    <Company>Intellismart Technology Inc.</Company>
+    <Description>This is wrapper for reading and writing excel Files (xls, xlsx) without MS Office Installed</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.16</Version>
+  </PropertyGroup>
+  
+   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NPOI\MAIN\HSSF\Record\Drawing\**" />
+    <EmbeddedResource Remove="NPOI\MAIN\HSSF\Record\Drawing\**" />
+    <None Remove="NPOI\MAIN\HSSF\Record\Drawing\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="NPOI\MAIN\HSSF\EventModel\ModelFactory.cs" />
+    <Compile Remove="NPOI\MAIN\HSSF\EventModel\ModelFactoryListener.cs" />
+    <Compile Remove="NPOI\MAIN\HSSF\Record\Chart\AxisLineFormatRecord.cs" />
+    <Compile Remove="NPOI\MAIN\HSSF\Record\Chart\AxisUsedRecord.cs" />
+    <Compile Remove="NPOI\MAIN\HSSF\Record\Chart\Chart3DBarShape.cs" />
+    <Compile Remove="NPOI\MAIN\HSSF\Record\Chart\ChartTitleFormatRecord.cs" />
+    <Compile Remove="NPOI\MAIN\SS\Util\BigInteger.cs" />
+    <Compile Remove="NPOI\MAIN\SS\Util\DataMarker.cs" />
+    <Compile Remove="NPOI\MAIN\SS\Util\DateFormatConverter.cs" />
+    <Compile Remove="NPOI\MAIN\Util\CommonsLogger.cs" />
+    <Compile Remove="NPOI\OOXML\Util\OOXMLLite.cs" />
+    <Compile Remove="NPOI\OOXML\XSSF\Extractor\XSSFEventBasedExcelExtractor.cs" />
+    <Compile Remove="NPOI\OOXML\XSSF\Extractor\XSSFImportFromXML.cs" />
+    <Compile Remove="NPOI\OOXML\XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+    <Compile Remove="NPOI\OpenXml4net\OPC\Package.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.5.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'NET40'">
+     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Resources\functionMetadata.txt" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\functionMetadata.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpZipLib" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Target Name="DebugRedDung" AfterTargets="Pack">
+    <Message Importance="high" Text="Red Dung Cli Started" />
+    <Exec Command="Reddung -w -n" ContinueOnError="true" />
+  </Target>
+
+</Project>
