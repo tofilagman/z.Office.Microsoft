@@ -104,9 +104,11 @@ namespace InSys.Office
             this.hssworkbook.Clear();
         }
 
-        public void AddSheet(string SheetName)
+        public ISheet AddSheet(string SheetName)
         {
-            Sheets.Add(SheetName, this.hssworkbook.CreateSheet(SheetName));
+            var sheet = default(ISheet);
+            Sheets.Add(SheetName, sheet = this.hssworkbook.CreateSheet(SheetName));
+            return sheet;
         }
 
         public IRow AddRow(string SheetName)
@@ -127,12 +129,9 @@ namespace InSys.Office
             return row;
         }
 
-        public void AddCell(IRow row, int index, object value, Type type, string Style = "")
-        {
-
-            //row.CreateCell(index).SetCellValue(value);
-            CreateCell(row, type, index, value);
-
+        public ICell AddCell(IRow row, int index, object value, Type type, string Style = "")
+        { 
+            var cell = CreateCell(row, type, index, value);
 
             if (Style.Trim() != "")
             {
@@ -140,19 +139,21 @@ namespace InSys.Office
                 {
                     if (this.XFontStyle.ContainsKey(Style))
                     {
-                        row.Cells[index].CellStyle = this.XFontStyle[Style];
+                        cell.CellStyle = this.XFontStyle[Style];
                     }
                 }
                 else if (this.HFontStyle.ContainsKey(Style))
                 {
-                    row.Cells[index].CellStyle = this.HFontStyle[Style];
+                    cell.CellStyle = this.HFontStyle[Style];
                 }
             }
+
+            return cell;
         }
 
-        public void AddCell(IRow row, int index, object value, string Style = "") => AddCell(row, index, value, typeof(string), Style);
+        public ICell AddCell(IRow row, int index, object value, string Style = "") => AddCell(row, index, value, typeof(string), Style);
 
-        public void AddCellFormula(IRow row, int index, string value, string Style = "")
+        public ICell AddCellFormula(IRow row, int index, string value, string Style = "")
         {
             ICell cell = row.CreateCell(index, CellType.Formula);
             cell.SetCellFormula(value);
@@ -171,14 +172,17 @@ namespace InSys.Office
                     cell.CellStyle = this.HFontStyle[Style];
                 }
             }
+
+            return cell;
         }
 
-        public void CreateCell(IRow row, Type type, int cellIndex, object value)
+        public ICell CreateCell(IRow row, Type type, int cellIndex, object value)
         {
+            var cell = row.CreateCell(cellIndex);
             if (value == null)
             {
-                row.CreateCell(cellIndex).SetCellValue(string.Empty);
-                return;
+                cell.SetCellValue(string.Empty);
+                return cell;
             }
 
             if (type == typeof(Int32) ||
@@ -187,25 +191,26 @@ namespace InSys.Office
               type == typeof(string) ||
               value == DBNull.Value)
             {
-                row.CreateCell(cellIndex).SetCellValue(value.ToString());
-                return;
+                cell.SetCellValue(value.ToString());
+                return cell;
             }
 
             if (type == typeof(bool))
             {
-                row.CreateCell(cellIndex).SetCellValue(Convert.ToBoolean(value));
+                cell.SetCellValue(Convert.ToBoolean(value));
             }
 
             if (type == typeof(DateTime))
             {
-                row.CreateCell(cellIndex).SetCellValue(Convert.ToDateTime(value));
+                cell.SetCellValue(Convert.ToDateTime(value));
             }
 
             if (type == typeof(double) ||
                 type == typeof(decimal))
             {
-                row.CreateCell(cellIndex).SetCellValue(Convert.ToDouble(value));
+                cell.SetCellValue(Convert.ToDouble(value));
             }
+            return cell;
         }
 
         public void AddCellStyle(String StyleName, String FontName = "Arial", Int16 FontSize = 8,
@@ -306,25 +311,42 @@ namespace InSys.Office
             ((XSSFWorkbook)hssworkbook).LockStructure();
         }
 
-        public void Save()
+        public void AutoSizeColumn(ISheet sheet, int column)
         {
-            foreach (KeyValuePair<string, ISheet> pair in this.Sheets)
-            {
-                int num = pair.Value.LastRowNum + 1;
-                int num2 = 0;
-                for (int i = 0; i < num; i++)
+            sheet.AutoSizeColumn(column);
+        }
+
+        public void AutoSizeColumn(string sheet, int column)
+        {
+            AutoSizeColumn(hssworkbook.GetSheet(sheet), column);
+        }
+
+        /// <summary>
+        /// Save to Disk
+        /// </summary>
+        /// <param name="AutoSizeColumns">
+        /// if true may take a while before saving
+        /// </param>
+        public void Save(bool AutoSizeColumns = false)
+        {
+            if (AutoSizeColumns)
+                foreach (KeyValuePair<string, ISheet> pair in this.Sheets)
                 {
-                    int physicalNumberOfCells = pair.Value.GetRow(i).PhysicalNumberOfCells;
-                    if (physicalNumberOfCells > num2)
+                    int num = pair.Value.LastRowNum + 1;
+                    int num2 = 0;
+                    for (int i = 0; i < num; i++)
                     {
-                        num2 = physicalNumberOfCells;
+                        int physicalNumberOfCells = pair.Value.GetRow(i).PhysicalNumberOfCells;
+                        if (physicalNumberOfCells > num2)
+                        {
+                            num2 = physicalNumberOfCells;
+                        }
+                    }
+                    for (int j = 0; j < num2; j++)
+                    {
+                        pair.Value.AutoSizeColumn(j);
                     }
                 }
-                for (int j = 0; j < num2; j++)
-                {
-                    pair.Value.AutoSizeColumn(j);
-                }
-            }
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -345,28 +367,31 @@ namespace InSys.Office
             }
         }
 
-        public void SaveToStream(Stream ms)
+        /// <summary>
+        /// Save to Stream
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <param name="AutoSizeColumns">if true may take a while before saving</param>
+        public void SaveToStream(Stream ms, bool AutoSizeColumns = false)
         {
-            foreach (KeyValuePair<string, ISheet> pair in this.Sheets)
-            {
-                int num = pair.Value.LastRowNum + 1;
-                int num2 = 0;
-                for (int i = 0; i < num; i++)
+            if (AutoSizeColumns)
+                foreach (KeyValuePair<string, ISheet> pair in this.Sheets)
                 {
-                    int physicalNumberOfCells = pair.Value.GetRow(i).PhysicalNumberOfCells;
-                    if (physicalNumberOfCells > num2)
+                    int num = pair.Value.LastRowNum + 1;
+                    int num2 = 0;
+                    for (int i = 0; i < num; i++)
                     {
-                        num2 = physicalNumberOfCells;
+                        int physicalNumberOfCells = pair.Value.GetRow(i).PhysicalNumberOfCells;
+                        if (physicalNumberOfCells > num2)
+                        {
+                            num2 = physicalNumberOfCells;
+                        }
+                    }
+                    for (int j = 0; j < num2; j++)
+                    {
+                        pair.Value.AutoSizeColumn(j);
                     }
                 }
-                for (int j = 0; j < num2; j++)
-                {
-                    pair.Value.AutoSizeColumn(j);
-                }
-            }
-
-            //using (MemoryStream ms = new MemoryStream())
-            //{
 
             if (this.IsNewFormat)
             {
@@ -378,9 +403,6 @@ namespace InSys.Office
             }
 
             ms.Seek(0, SeekOrigin.Begin);
-
-
-            //}
         }
 
         protected void InitiateColumnCells()
