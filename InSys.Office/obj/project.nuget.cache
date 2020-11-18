@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "x8jDM8BuTyh089qhsOorV7Mlax1r4IEUP7fELIegycGXEoKRe270hIzxzEc3TN6PoR3Z/YBO3nUewHP4bMTiaQ==",
+  "success": true,
+  "projectFilePath": "C:\\Projects\\OutSource\\insys-office\\InSys.Office\\z.Office.Microsoft.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.app\\2.1.0\\microsoft.netcore.app.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.dotnetapphost\\2.1.0\\microsoft.netcore.dotnetapphost.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.dotnethostpolicy\\2.1.0\\microsoft.netcore.dotnethostpolicy.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.dotnethostresolver\\2.1.0\\microsoft.netcore.dotnethostresolver.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.platforms\\2.1.0\\microsoft.netcore.platforms.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.netcore.targets\\2.1.0\\microsoft.netcore.targets.2.1.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\sharpziplib\\1.3.0\\sharpziplib.1.3.0.nupkg.sha512",
+    "C:\\Users\\Antelope\\.nuget\\packages\\system.drawing.common\\4.5.0\\system.drawing.common.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InSys.Office\InSys.Office.csproj" />
+    <ProjectReference Include="..\z.Office.Microsoft\z.Office.Microsoft.csproj" />
   </ItemGroup>
 
 </Project>

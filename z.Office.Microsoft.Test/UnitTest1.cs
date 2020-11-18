@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 
-namespace InSys.Office.Test
+namespace z.Office.Microsoft.Test
 {
     [TestClass]
     public class UnitTest1
@@ -10,7 +10,7 @@ namespace InSys.Office.Test
         [TestMethod]
         public void TestMethod1()
         {
-            using (var ms = new InSys.Office.ExcelWriter(true))
+            using (var ms = new z.Office.Microsoft.ExcelWriter(true))
             {
                 ms.FileName = Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString() + ".xlsx");
 

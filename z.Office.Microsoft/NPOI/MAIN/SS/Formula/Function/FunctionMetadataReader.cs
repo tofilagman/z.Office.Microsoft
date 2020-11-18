@@ -38,7 +38,7 @@ namespace NPOI.SS.Formula.Function
         //#if NET40
         //        private const String METADATA_FILE_NAME = "functionMetadata.txt";
         //#else
-        private const String METADATA_FILE_NAME = "InSys.Office.Resources.functionMetadata.txt";
+        private const String METADATA_FILE_NAME = "z.Office.Microsoft.Resources.functionMetadata.txt";
         //#endif
 
         /** plain ASCII text metadata file uses three dots for ellipsis */

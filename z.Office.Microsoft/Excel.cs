@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 
-namespace InSys.Office
+namespace z.Office.Microsoft
 {
     /// <summary>
     /// LJ 20131209, NPOI

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace InSys.Office
+namespace z.Office.Microsoft
 {
     public class ExcelWriter : IDisposable
     {
@@ -74,6 +74,16 @@ namespace InSys.Office
             }
         }
 
+        public void SetColumnWidth(String SheetName, Int32 Column, Int32 Width)
+        {
+            Sheets[SheetName].SetColumnWidth(Column, Width);
+        }
+
+        public void MergeCells(String SheetName, Int32 RowStart, Int32 RowEnd, Int32 ColumnStart, Int32 ColumnEnd)
+        {
+            Sheets[SheetName].AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(RowStart, RowEnd, ColumnStart, ColumnEnd));
+        }
+ 
         /// <summary>
         /// Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
         /// happens to be the 1-based column number of the last cell.  This value can be used as a
@@ -111,6 +121,24 @@ namespace InSys.Office
             return sheet;
         }
 
+        public IRow AddRow(string SheetName, float rowHeight = 15)
+        {
+            int idx = 0;
+            if (!RowIndex.ContainsKey(SheetName))
+            {
+                RowIndex.Add(SheetName, idx);
+            }
+            else
+            {
+                idx = RowIndex[SheetName] + 1;
+                RowIndex[SheetName] = idx;
+            }
+
+            IRow row = this.hssworkbook.GetSheet(SheetName).CreateRow(idx);
+            row.HeightInPoints = rowHeight;
+            return row;
+        }
+ 
         public IRow AddRow(string SheetName)
         {
             int idx = 0;
@@ -219,7 +247,7 @@ namespace InSys.Office
            VerticalAlignment VerticalAlign = VerticalAlignment.Top, BorderStyle TopBorder = BorderStyle.None,
            BorderStyle BottomBorder = BorderStyle.None, BorderStyle RightBorder = BorderStyle.None,
            BorderStyle LeftBorder = BorderStyle.None, IndexedColors FontColor = null,
-           IndexedColors BackgroundColor = null)
+           IndexedColors BackgroundColor = null, short HSSFBackgroundColorIndex = 64, byte[] XSSFColorByte = null)
         {
             IFont font = this.hssworkbook.CreateFont();
             font.Color = ((FontColor == null) ? IndexedColors.Black.Index : FontColor.Index);
@@ -249,6 +277,13 @@ namespace InSys.Office
                     style.FillPattern = FillPattern.SolidForeground;
                 }
 
+
+                if (XSSFColorByte != null)
+                {
+                    style.FillPattern = FillPattern.SolidForeground;
+                    style.FillForegroundXSSFColor = new XSSFColor(XSSFColorByte);
+                }
+
                 if (!this.XFontStyle.ContainsKey(StyleName))
                 {
                     this.XFontStyle.Add(StyleName, style);
@@ -274,6 +309,12 @@ namespace InSys.Office
                     style2.FillForegroundColor = BackgroundColor.Index;
                     style2.FillPattern = FillPattern.SolidForeground;
                 }
+                else if (HSSFBackgroundColorIndex != 64)
+                {
+                    style2.FillPattern = FillPattern.SolidForeground;
+                    style2.FillForegroundColor = HSSFBackgroundColorIndex;
+                }
+
                 if (!this.HFontStyle.ContainsKey(StyleName))
                 {
                     this.HFontStyle.Add(StyleName, style2);
@@ -284,13 +325,7 @@ namespace InSys.Office
                 }
             }
         }
-
-        public void MergeCells(string SheetName, int firstRow, int lastRow, int firstCell, int lastCell)
-        {
-            var cra = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, firstCell, lastCell);
-            this.hssworkbook.GetSheet(SheetName).AddMergedRegion(cra);
-        }
-
+         
         /// <summary>
         /// Only supported on new Version of Excel
         /// </summary>
