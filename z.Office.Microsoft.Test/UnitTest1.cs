@@ -10,9 +10,9 @@ namespace z.Office.Microsoft.Test
         [TestMethod]
         public void TestMethod1()
         {
-            using (var ms = new z.Office.Microsoft.ExcelWriter(true))
+            using (var ms = new z.Office.Microsoft.ExcelWriter(false))
             {
-                ms.FileName = Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString() + ".xlsx");
+                ms.FileName = Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString() + ".xls");
 
                 ms.AddSheet("test");
 
@@ -20,7 +20,8 @@ namespace z.Office.Microsoft.Test
 
                 ms.AddCell(row, 0, "Hello World");
                 ms.AddCell(row, 1, int.MaxValue);
-                ms.AddCell(row, 2, DateTime.Now);
+                var cell = ms.AddCell(row, 2, DateTime.Now);
+                ms.AddCellComment(cell, "Hello from world");
 
                 ms.Save();
 

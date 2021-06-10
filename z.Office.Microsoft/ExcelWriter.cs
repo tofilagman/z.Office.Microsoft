@@ -30,6 +30,7 @@ namespace z.Office.Microsoft
             HFontStyle = new Dictionary<string, HSSFCellStyle>();
             XFontStyle = new Dictionary<string, XSSFCellStyle>();
             this.InitiateColumnCells();
+
         }
 
         public ExcelWriter(bool NewFormat) : this()
@@ -83,7 +84,7 @@ namespace z.Office.Microsoft
         {
             Sheets[SheetName].AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(RowStart, RowEnd, ColumnStart, ColumnEnd));
         }
- 
+
         /// <summary>
         /// Gets the index of the last cell Contained in this row <b>PLUS ONE</b>. The result also
         /// happens to be the 1-based column number of the last cell.  This value can be used as a
@@ -118,6 +119,7 @@ namespace z.Office.Microsoft
         {
             var sheet = default(ISheet);
             Sheets.Add(SheetName, sheet = this.hssworkbook.CreateSheet(SheetName));
+
             return sheet;
         }
 
@@ -138,7 +140,7 @@ namespace z.Office.Microsoft
             row.HeightInPoints = rowHeight;
             return row;
         }
- 
+
         public IRow AddRow(string SheetName)
         {
             int idx = 0;
@@ -158,7 +160,7 @@ namespace z.Office.Microsoft
         }
 
         public ICell AddCell(IRow row, int index, object value, Type type, string Style = "")
-        { 
+        {
             var cell = CreateCell(row, type, index, value);
 
             if (Style.Trim() != "")
@@ -239,6 +241,37 @@ namespace z.Office.Microsoft
                 cell.SetCellValue(Convert.ToDouble(value));
             }
             return cell;
+        }
+
+        /// <summary>
+        /// An Arrow bug from 2007+ version
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="comment"></param>
+        /// <param name="author"></param>
+        public void AddCellComment(ICell cell, string comment, string author = "")
+        {
+            var patriach = cell.Sheet.CreateDrawingPatriarch();
+            IComment ccm;
+            IRichTextString text;
+
+            if (IsNewFormat)
+            {
+                var anchor = new XSSFClientAnchor(0, 0, 0, 0, cell.ColumnIndex, cell.RowIndex, cell.ColumnIndex + 4, cell.ColumnIndex + 4);
+                ccm = patriach.CreateCellComment(anchor);
+                text = new XSSFRichTextString(comment);
+            }
+            else
+            {
+                var anchor = new HSSFClientAnchor(0, 0, 0, 0, cell.ColumnIndex, cell.RowIndex, cell.ColumnIndex + 4, cell.ColumnIndex + 4);
+                ccm = patriach.CreateCellComment(anchor);
+                text = new HSSFRichTextString(comment);
+            }
+              
+            ccm.String = text;
+            ccm.Author = author;
+            ccm.Visible = false;
+            cell.CellComment = ccm;
         }
 
         public void AddCellStyle(String StyleName, String FontName = "Arial", Int16 FontSize = 8,
@@ -325,7 +358,7 @@ namespace z.Office.Microsoft
                 }
             }
         }
-         
+
         /// <summary>
         /// Only supported on new Version of Excel
         /// </summary>
