@@ -106,7 +106,7 @@ namespace z.Office.Microsoft
                     row = this.GetRow(rows.Current);
                     var pp = new Pair();
 
-                    for (int i = 0; i < cols.Keys.Max(); i++)
+                    for (int i = 0; i < cols.Keys.Count; i++)
                     {
                         ICell cell = row.GetCell(i);
 

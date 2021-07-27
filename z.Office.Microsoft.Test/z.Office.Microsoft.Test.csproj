@@ -16,4 +16,13 @@
     <ProjectReference Include="..\z.Office.Microsoft\z.Office.Microsoft.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="StudentTemplate-3fcbe412e7ed47a9a07c31f818318caf.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="StudentTemplate-79aa6ae1a8d54224b75185391ebc925a.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

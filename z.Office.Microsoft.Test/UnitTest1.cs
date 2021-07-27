@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace z.Office.Microsoft.Test
 {
@@ -28,6 +29,22 @@ namespace z.Office.Microsoft.Test
             }
 
 
+        }
+
+        [TestMethod]
+        public void TestUpload()
+        {
+            var mfile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "StudentTemplate-3fcbe412e7ed47a9a07c31f818318caf.xlsx");
+
+            var xls = new ExcelReader(mfile);
+
+            var sheet = xls.SheetsNames.First();
+            var data = xls.ReadSheet(sheet);
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(1, data.Count);
+            Assert.AreEqual("20210001", data[0]["Student No"]);
+    
         }
     }
 }
