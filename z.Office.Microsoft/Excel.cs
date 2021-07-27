@@ -13,6 +13,7 @@ namespace z.Office.Microsoft
     /// Excel new Library, using NPOI
     /// Supported Microsoft Office Application without interop, current 2003 and latest formats
     /// </summary>
+    [Obsolete("Will remove on next update, use ExcelReader instead")]
     public class Excel : IDisposable
     {
         #region Variables
