@@ -62,7 +62,6 @@ namespace z.Office.Microsoft
             {
                 this.hssworkbook = new HSSFWorkbook(fs);
             }
-
         }
 
         ~ExcelReader() => Dispose();
@@ -78,7 +77,13 @@ namespace z.Office.Microsoft
 
         #region Read
 
-        public ExcelWorkSheet ReadSheet(string sheet)
+        /// <summary>
+        /// Reads Sheet
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="rowIndex">defaults to 1 to skip the header</param>
+        /// <returns></returns>
+        public ExcelWorkSheet ReadSheet(string sheet, int rowIndex = 1)
         {
             try
             {
@@ -90,7 +95,8 @@ namespace z.Office.Microsoft
 
                 System.Collections.IEnumerator rows = sht.GetRowEnumerator();
 
-                rows.MoveNext();
+                for (var i = 0; i < rowIndex; i++)
+                    rows.MoveNext();
 
                 IRow row = this.GetRow(rows.Current);
 

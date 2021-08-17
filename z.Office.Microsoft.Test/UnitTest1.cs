@@ -27,8 +27,6 @@ namespace z.Office.Microsoft.Test
                 ms.Save();
 
             }
-
-
         }
 
         [TestMethod]
@@ -44,7 +42,24 @@ namespace z.Office.Microsoft.Test
             Assert.IsNotNull(data);
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual("20210001", data[0]["Student No"]);
-    
+
+        }
+
+        [TestMethod]
+        public void ReadExcel()
+        {
+            var mfile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "StudentTemplate-a7716fbb9fe845a5acf787ee82b02c73.xlsx");
+
+            var mpc = File.ReadAllBytes(mfile);
+
+            var xls = new ExcelReader(new MemoryStream(mpc), true);
+
+            var sheet = xls.SheetsNames.First();
+            var data = xls.ReadSheet(sheet, 5);
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(1, data.Count);
+            Assert.AreEqual("Rizal", data[0]["Last Name"]);
         }
     }
 }

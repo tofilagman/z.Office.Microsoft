@@ -23,6 +23,9 @@
     <None Update="StudentTemplate-79aa6ae1a8d54224b75185391ebc925a.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="StudentTemplate-a7716fbb9fe845a5acf787ee82b02c73.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
