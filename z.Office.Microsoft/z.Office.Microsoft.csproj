@@ -6,7 +6,7 @@
     <Company>Real Consulting Org</Company>
     <Description>This is wrapper for reading and writing excel Files (xls, xlsx) without MS Office Installed</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.8</Version>
+    <Version>1.1.9</Version>
     <PackageReleaseNotes>Optimize Speed, Convert Void to Object Functions</PackageReleaseNotes>
   </PropertyGroup>
   
