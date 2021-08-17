@@ -19,9 +19,9 @@ namespace z.Office.Microsoft.Test
 
                 var row = ms.AddRow("test");
 
-                ms.AddCell(row, 0, "Hello World");
-                ms.AddCell(row, 1, int.MaxValue);
-                var cell = ms.AddCell(row, 2, DateTime.Now);
+                ms.GetOrCreateCell(row, 0, "Hello World");
+                ms.GetOrCreateCell(row, 1, int.MaxValue);
+                var cell = ms.GetOrCreateCell(row, 2, DateTime.Now);
                 ms.AddCellComment(cell, "Hello from world");
 
                 ms.Save();

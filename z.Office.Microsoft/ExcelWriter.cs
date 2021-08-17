@@ -159,9 +159,9 @@ namespace z.Office.Microsoft
             return row;
         }
 
-        public ICell AddCell(IRow row, int index, object value, Type type, string Style = "")
+        public ICell GetOrCreateCell(IRow row, int index, object value, Type type, string Style = "")
         {
-            var cell = CreateCell(row, type, index, value);
+            var cell = GetOrCreateCell(row, type, index, value);
 
             if (Style.Trim() != "")
             {
@@ -181,7 +181,7 @@ namespace z.Office.Microsoft
             return cell;
         }
 
-        public ICell AddCell(IRow row, int index, object value, string Style = "") => AddCell(row, index, value, typeof(string), Style);
+        public ICell GetOrCreateCell(IRow row, int index, object value, string Style = "") => GetOrCreateCell(row, index, value, typeof(string), Style);
 
         public ICell AddCellFormula(IRow row, int index, string value, string Style = "")
         {
@@ -206,9 +206,12 @@ namespace z.Office.Microsoft
             return cell;
         }
 
-        public ICell CreateCell(IRow row, Type type, int cellIndex, object value)
+        public ICell GetOrCreateCell(IRow row, Type type, int cellIndex, object value)
         {
-            var cell = row.CreateCell(cellIndex);
+            var cell = row.GetCell(cellIndex);
+            if (cell == null)
+                cell = row.CreateCell(cellIndex);
+            
             if (value == null)
             {
                 cell.SetCellValue(string.Empty);
@@ -267,7 +270,7 @@ namespace z.Office.Microsoft
                 ccm = patriach.CreateCellComment(anchor);
                 text = new HSSFRichTextString(comment);
             }
-              
+
             ccm.String = text;
             ccm.Author = author;
             ccm.Visible = false;
@@ -506,6 +509,21 @@ namespace z.Office.Microsoft
         public void SplitPane(string SheetName, int xSplitPos, int ySplitPos, int leftmostColumn, int topRow, PanePosition activePane)
         {
             this.hssworkbook.GetSheet(SheetName).CreateSplitPane(xSplitPos, ySplitPos, leftmostColumn, topRow, activePane);
+        }
+
+        public ISheet GetSheet(string sheet)
+        {
+            return this.hssworkbook.GetSheet(sheet);
+        }
+
+        public IRow GetRow(ISheet sheet, int rowIndex)
+        {
+            return sheet.GetRow(rowIndex);
+        }
+
+        public IRow GetRow(string sheet, int rowIndex)
+        {
+            return GetSheet(sheet).GetRow(rowIndex);
         }
 
         public void Dispose()
